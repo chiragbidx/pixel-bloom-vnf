@@ -2,15 +2,13 @@
 
 import * as React from "react";
 import { useState, useRef, useTransition } from "react";
-import { Users, Loader2, Edit2, Trash2, X, Check } from "lucide-react";
+import { Users, Loader2, Edit2, Trash2 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { addClient, updateClient, deleteClient } from "./actions";
-import type { z } from "zod";
-import { clientFormSchema } from "./actions";
 
 type ClientType = {
   id: string,
@@ -26,15 +24,35 @@ type ClientType = {
 };
 
 export default function ClientsClient(props: { clients: ClientType[] }) {
-  const [open, setOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [editClient, setEditClient] = useState<ClientType | null>(null);
   const [pending, startTransition] = useTransition();
   const [formError, setFormError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  // Add/Edit form submission
-  function handleFormSubmit(formData: FormData) {
+  function handleOpenAdd() {
+    setEditClient(null);
     setFormError(null);
+    setModalOpen(true);
+  }
+
+  function handleOpenEdit(client: ClientType) {
+    setEditClient(client);
+    setFormError(null);
+    setModalOpen(true);
+  }
+
+  function handleCloseModal() {
+    setEditClient(null);
+    setFormError(null);
+    setModalOpen(false);
+  }
+
+  // Add/Edit form submission
+  function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setFormError(null);
+    const formData = new FormData(e.currentTarget);
     startTransition(async () => {
       try {
         if (editClient) {
@@ -42,8 +60,7 @@ export default function ClientsClient(props: { clients: ClientType[] }) {
         } else {
           await addClient(formData);
         }
-        setEditClient(null);
-        setOpen(false);
+        handleCloseModal();
       } catch (e: any) {
         setFormError(e.message || "Save failed.");
       }
@@ -60,23 +77,21 @@ export default function ClientsClient(props: { clients: ClientType[] }) {
     });
   }
 
-  // UI for add/edit client form inside a drawer/sheet
-  function ClientForm() {
-    // Use ref to submit the form imperatively
-    const formRef = useRef<HTMLFormElement>(null);
+  // UI for add/edit client form inside a modal dialog
+  function ClientFormModal() {
     return (
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="right" className="max-w-md w-full">
-          <SheetHeader>
-            <SheetTitle>
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent className="max-w-md w-full">
+          <DialogHeader>
+            <DialogTitle>
               {editClient ? "Edit Client" : "Add Client"}
-            </SheetTitle>
-          </SheetHeader>
+            </DialogTitle>
+          </DialogHeader>
           <form
-            ref={formRef}
             className="mt-6 grid gap-4"
             action={handleFormSubmit}
-            onSubmit={() => setFormError(null)}
+            onSubmit={handleFormSubmit}
+            autoComplete="off"
           >
             {editClient && (
               <input type="hidden" name="id" value={editClient.id} />
@@ -144,15 +159,11 @@ export default function ClientsClient(props: { clients: ClientType[] }) {
             {formError && (
               <div className="text-destructive text-sm">{formError}</div>
             )}
-            <SheetFooter className="flex gap-2 pt-4">
+            <DialogFooter className="flex gap-2 pt-4">
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => {
-                  setOpen(false);
-                  setEditClient(null);
-                  setFormError(null);
-                }}
+                onClick={handleCloseModal}
                 disabled={pending}
               >
                 Cancel
@@ -166,10 +177,10 @@ export default function ClientsClient(props: { clients: ClientType[] }) {
                 {pending && <Loader2 className="size-4 animate-spin" />}
                 {editClient ? "Save Changes" : "Add Client"}
               </Button>
-            </SheetFooter>
+            </DialogFooter>
           </form>
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
     );
   }
 
@@ -193,13 +204,13 @@ export default function ClientsClient(props: { clients: ClientType[] }) {
               No clients registered.
             </div>
             <div className="mt-6 flex justify-end">
-              <Button onClick={() => setOpen(true)} variant="outline">
+              <Button onClick={handleOpenAdd} variant="outline">
                 Add Client
               </Button>
             </div>
           </CardContent>
         </Card>
-        <ClientForm />
+        <ClientFormModal />
       </section>
     );
   }
@@ -244,10 +255,7 @@ export default function ClientsClient(props: { clients: ClientType[] }) {
                           variant="ghost"
                           aria-label="Edit"
                           className="text-muted-foreground"
-                          onClick={() => {
-                            setEditClient(client);
-                            setOpen(true);
-                          }}
+                          onClick={() => handleOpenEdit(client)}
                           disabled={pending}
                         >
                           <Edit2 className="size-4" />
@@ -274,13 +282,13 @@ export default function ClientsClient(props: { clients: ClientType[] }) {
             </table>
           </div>
           <div className="mt-6 flex justify-end">
-            <Button onClick={() => { setEditClient(null); setOpen(true); }} variant="outline">
+            <Button onClick={handleOpenAdd} variant="outline">
               Add Client
             </Button>
           </div>
         </CardContent>
       </Card>
-      <ClientForm />
+      <ClientFormModal />
     </section>
   );
 }
