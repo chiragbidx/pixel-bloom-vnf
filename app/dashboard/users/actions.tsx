@@ -16,7 +16,6 @@ export async function getAllTeams() {
 
 // List team members for a team
 export async function getTeamMembers(teamId: string) {
-  // Select firstName and lastName separately, then compose in JS to avoid "db.sql is not a function" error
   const members = await db
     .select({
       id: users.id,
@@ -29,7 +28,6 @@ export async function getTeamMembers(teamId: string) {
     .innerJoin(users, eq(teamMembers.userId, users.id))
     .where(eq(teamMembers.teamId, teamId));
 
-  // Compose .name field from firstName and lastName:
   return members.map(m => ({
     id: m.id,
     email: m.email,
@@ -38,7 +36,27 @@ export async function getTeamMembers(teamId: string) {
   }));
 }
 
-// Assign a user to a team (or change their existing team membership)
+// Look up user by email
+export async function findUserIdByEmail(email: string): Promise<null | { id: string, email: string, name: string }> {
+  if (!email) return null;
+  const user = await db
+    .select({
+      id: users.id,
+      email: users.email,
+      firstName: users.firstName,
+      lastName: users.lastName
+    })
+    .from(users)
+    .where(eq(users.email, email));
+  if (user.length === 0) return null;
+  return {
+    id: user[0].id,
+    email: user[0].email,
+    name: [user[0].firstName, user[0].lastName].filter(Boolean).join(" "),
+  };
+}
+
+// Assign a user to a team (by user ID)
 export async function assignUserToTeam({
   userId,
   teamId,
@@ -51,7 +69,7 @@ export async function assignUserToTeam({
   const session = await getAuthSession();
   if (!session) throw new Error("Not authenticated");
 
-  // Only admins/owners can assign teams
+  // Permission check
   const requester = await db
     .select()
     .from(teamMembers)
@@ -72,6 +90,12 @@ export async function assignUserToTeam({
     .where(and(eq(teamMembers.userId, userId), eq(teamMembers.teamId, teamId)));
   if (existing.length) {
     throw new Error("User is already assigned to this team.");
+  }
+
+  // Check if user exists
+  const exists = await db.select().from(users).where(eq(users.id, userId));
+  if (exists.length === 0) {
+    throw new Error("User does not exist. Please invite or ensure user is registered.");
   }
 
   // Insert new membership
