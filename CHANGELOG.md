@@ -36,3 +36,8 @@
   - **Clients**: Companies you serve or track.
 - Updated SidebarNav to include all new CRM pages under the CRM section.
 - Implemented placeholder UI and server actions for each page for future feature integration.
+
+## 2024-06-14
+
+### Fixed
+- Replaced invalid `Pipeline` icon import from `lucide-react` in `LayoutFeatureGridSection.tsx` with the supported `PenLine` icon to resolve build errors.
