@@ -14,7 +14,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { getAllTeams, getTeamMembers, assignUserToTeam } from "./actions";
+import { getAllTeams, getTeamMembers, assignUserToTeam, findUserIdByEmail } from "./actions";
 
 type Team = {
   id: string;
@@ -79,19 +79,21 @@ export default function UsersClient() {
     setError(null);
     startTransition(async () => {
       try {
-        // Simulate lookup by email, in a real app this would be a user search/lookup
         if (!assignEmail) throw new Error("Please enter an email.");
-        // For demo: assign to demo userId; in real world, lookup this user in DB
-        // Here, let's just block invalid
+        // Lookup userId by email FIRST
+        const userObj = await findUserIdByEmail(assignEmail);
+        if (!userObj) {
+          setError("User does not exist. Please invite or ensure user is registered.");
+          return;
+        }
         await assignUserToTeam({
-          userId: assignUserId ?? assignEmail, // In real use, must resolve userId from email!
+          userId: userObj.id,
           teamId: selectedTeamId,
           role: assignRole,
         });
         setShowAssignModal(false);
         setAssignEmail("");
         setAssignRole("member");
-        // Refetch members for updated list
         const fetchedMembers = await getTeamMembers(selectedTeamId);
         setMembers(fetchedMembers);
       } catch (e: any) {
