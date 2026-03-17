@@ -121,3 +121,30 @@ export const clients = pgTable("clients", {
     .notNull()
     .defaultNow(),
 });
+
+// --- Contacts Table ---
+export const contacts = pgTable("contacts", {
+  id: text("id")
+    .notNull()
+    .default(sql`gen_random_uuid()`)
+    .primaryKey(),
+  teamId: text("team_id")
+    .notNull()
+    .references(() => teams.id, { onDelete: "cascade" }),
+  clientId: text("client_id").references(() => clients.id, { onDelete: "set null" }),
+  name: text("name").notNull(),
+  email: text("email"), // optional, contact-level email
+  phone: text("phone"), // optional
+  company: text("company"),
+  status: text("status").notNull().default("active"),
+  notes: text("notes").default(""),
+  createdByUserId: text("created_by_user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
