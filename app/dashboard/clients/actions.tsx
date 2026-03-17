@@ -21,7 +21,10 @@ export const clientFormSchema = z.object({
 export async function addClient(form: FormData) {
   const session = await getAuthSession();
   if (!session) throw new Error("Not authenticated");
-  if (!session.teamId) throw new Error("No team assigned");
+  // TeamId is now optional
+  if (!session.teamId) {
+    throw new Error("You must be assigned to a team to add clients.");
+  }
 
   const parsed = clientFormSchema.safeParse({
     name: form.get("name"),
@@ -50,7 +53,10 @@ export async function addClient(form: FormData) {
 export async function updateClient(form: FormData) {
   const session = await getAuthSession();
   if (!session) throw new Error("Not authenticated");
-  if (!session.teamId) throw new Error("No team assigned");
+  // TeamId is now optional
+  if (!session.teamId) {
+    throw new Error("You must be assigned to a team to update clients.");
+  }
 
   const parsed = clientFormSchema.safeParse({
     id: form.get("id"),
@@ -88,7 +94,10 @@ export async function updateClient(form: FormData) {
 export async function deleteClient(id: string) {
   const session = await getAuthSession();
   if (!session) throw new Error("Not authenticated");
-  if (!session.teamId) throw new Error("No team assigned");
+  // TeamId is now optional
+  if (!session.teamId) {
+    throw new Error("You must be assigned to a team to delete clients.");
+  }
 
   await db.delete(clients).where(
     and(
