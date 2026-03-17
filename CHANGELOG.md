@@ -54,3 +54,11 @@
 
 ### Fixed
 - Refactored dashboard Clients page to avoid invalid `"use server"` import usage. Client list query is now run directly in `page.tsx`, and server actions only export form actions, per Next.js best practices and App Router conventions.
+
+## 2024-06-14
+
+### Changed
+- Upgraded dashboard Clients page: now all signed-in users (any role) can add or edit clients.
+- Switched add/edit client form UI from a sidebar sheet to a centered modal dialog for simpler, more standard UX.
+- Retained robust validation, error feedback, and differentiated modal titles for add vs edit flows.
+[/list]
