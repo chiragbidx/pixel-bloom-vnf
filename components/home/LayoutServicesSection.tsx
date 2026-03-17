@@ -1,49 +1,37 @@
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { getHomeContent } from "@/content/home";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const { services } = getHomeContent();
 
-export const LayoutServicesSection = () => {
-  return (
-    <section id="services" className="container py-24 sm:py-32">
-      <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
-        {services.eyebrow}
-      </h2>
-
-      <h2 className="text-3xl md:text-4xl text-center font-bold mb-4">
-        {services.heading}
-      </h2>
-      <h3 className="md:w-1/2 mx-auto text-xl text-center text-muted-foreground mb-8">
-        {services.subtitle}
-      </h3>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-
-      <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-4 w-full lg:w-[60%] mx-auto">
-        {services.items.map(({ title, description, pro }) => (
+export const LayoutServicesSection = () => (
+  <section id="services" className="container py-24 sm:py-32">
+    <div className="text-center mb-8">
+      <h2 className="text-lg text-primary text-center mb-2 tracking-wider">{services.eyebrow}</h2>
+      <h2 className="text-3xl md:text-4xl text-center font-bold mb-4">{services.heading}</h2>
+      <h3 className="md:w-1/2 mx-auto text-xl text-center text-muted-foreground pb-14">{services.subtitle}</h3>
+    </div>
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-4">
+      {services.items.map(
+        ({ title, description, pro }) => (
           <Card
             key={title}
-            className="bg-muted/60 dark:bg-card h-full relative"
+            className={
+              pro
+                ? "drop-shadow-xl shadow-black/10 dark:shadow-white/10 border-[1.5px] border-primary"
+                : ""
+            }
           >
             <CardHeader>
-              <CardTitle>{title}</CardTitle>
-              <CardDescription>{description}</CardDescription>
+              <CardTitle className="pb-2">{title}</CardTitle>
+              <CardDescription className="pb-4">{description}</CardDescription>
             </CardHeader>
-            <Badge
-              data-pro={pro}
-              variant="secondary"
-              className="absolute -top-2 -right-3 data-[pro=false]:hidden"
-            >
-              PRO
-            </Badge>
+            <CardContent>
+              <Badge variant={pro ? "default" : "secondary"} className="mb-2">{pro ? "Pro" : "Included"}</Badge>
+            </CardContent>
           </Card>
-        ))}
-      </div>
-    </section>
-  );
-};
+        )
+      )}
+    </div>
+  </section>
+);
