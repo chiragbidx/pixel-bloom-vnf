@@ -1,27 +1,16 @@
 "use server";
 
-import { z } from "zod";
 import { eq, and } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import { clients } from "@/lib/db/schema";
 import { getAuthSession } from "@/lib/auth/session";
 import { revalidatePath } from "next/cache";
-
-// Zod validation for the client form
-export const clientFormSchema = z.object({
-  id: z.string().optional(), // present on edit
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email().optional().or(z.literal("")),
-  company: z.string().optional(),
-  status: z.string().optional(),
-  notes: z.string().optional(),
-});
+import { clientFormSchema } from "./client-validation";
 
 // Add (create) a new client
 export async function addClient(form: FormData) {
   const session = await getAuthSession();
   if (!session) throw new Error("Not authenticated");
-  // TeamId is now optional
   if (!session.teamId) {
     throw new Error("You must be assigned to a team to add clients.");
   }
@@ -53,7 +42,6 @@ export async function addClient(form: FormData) {
 export async function updateClient(form: FormData) {
   const session = await getAuthSession();
   if (!session) throw new Error("Not authenticated");
-  // TeamId is now optional
   if (!session.teamId) {
     throw new Error("You must be assigned to a team to update clients.");
   }
@@ -94,7 +82,6 @@ export async function updateClient(form: FormData) {
 export async function deleteClient(id: string) {
   const session = await getAuthSession();
   if (!session) throw new Error("Not authenticated");
-  // TeamId is now optional
   if (!session.teamId) {
     throw new Error("You must be assigned to a team to delete clients.");
   }
