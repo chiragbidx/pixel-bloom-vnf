@@ -22,13 +22,33 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { getHomeContent } from "@/content/home";
-
-const { navbar } = getHomeContent();
 
 interface NavbarProps {
   isLoggedIn?: boolean;
 }
+
+const navbar = {
+  brandName: "StartwiseCRM",
+  routes: [
+    { href: "/#features", label: "Features" },
+    { href: "/#how-it-works", label: "How it works" },
+    { href: "/#testimonials", label: "Testimonials" },
+    { href: "/#contact", label: "Contact" },
+    { href: "/#faq", label: "FAQ" },
+  ],
+  featureDropdownLabel: "Key Features",
+  featureImage: { src: "/demo-img.jpg", alt: "StartwiseCRM CRM preview" },
+  features: [
+    { title: "Clients & Contacts", description: "Keep all your client details, contacts, and team notes in one place." },
+    { title: "Deal Pipeline", description: "Visualize and manage sales opportunities at every stage." },
+    { title: "Activity Tracking", description: "Attach calls, meetings, and logs to every record for true context." },
+    { title: "Secure Collaboration", description: "Startup teams only. Role-based permissions and tenant data isolation." },
+  ],
+  signInLabel: "Sign in",
+  signUpLabel: "Sign up",
+  dashboardLabel: "Dashboard",
+  githubLink: { href: "https://github.com", ariaLabel: "View on GitHub" },
+};
 
 export const Navbar = ({ isLoggedIn = false }: NavbarProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -47,7 +67,6 @@ export const Navbar = ({ isLoggedIn = false }: NavbarProps) => {
               className="cursor-pointer lg:hidden"
             />
           </SheetTrigger>
-
           <SheetContent
             side="left"
             className="flex flex-col justify-between rounded-tr-2xl rounded-br-2xl bg-card border-secondary"
@@ -61,7 +80,6 @@ export const Navbar = ({ isLoggedIn = false }: NavbarProps) => {
                   </Link>
                 </SheetTitle>
               </SheetHeader>
-
               <div className="flex flex-col gap-2">
                 {navbar.routes.map(({ href, label }) => (
                   <Button
@@ -103,16 +121,13 @@ export const Navbar = ({ isLoggedIn = false }: NavbarProps) => {
                 )}
               </div>
             </div>
-
             <SheetFooter className="flex-col sm:flex-col justify-start items-start">
               <Separator className="mb-2" />
-
               <ThemeToggle mode="inline" />
             </SheetFooter>
           </SheetContent>
         </Sheet>
       </div>
-
       {/* <!-- Desktop --> */}
       <NavigationMenu className="hidden lg:block mx-auto">
         <NavigationMenuList>
@@ -121,7 +136,7 @@ export const Navbar = ({ isLoggedIn = false }: NavbarProps) => {
               {navbar.featureDropdownLabel}
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className="grid w-[600px] grid-cols-2 gap-5 p-4">
+              <div className="grid w-[650px] grid-cols-2 gap-5 p-4">
                 <Image
                   src={navbar.featureImage.src}
                   alt={navbar.featureImage.alt}
@@ -147,7 +162,6 @@ export const Navbar = ({ isLoggedIn = false }: NavbarProps) => {
               </div>
             </NavigationMenuContent>
           </NavigationMenuItem>
-
           <NavigationMenuItem>
             {navbar.routes.map(({ href, label }) => (
               <NavigationMenuLink key={href} asChild>
@@ -159,7 +173,6 @@ export const Navbar = ({ isLoggedIn = false }: NavbarProps) => {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-
       <div className="hidden lg:flex items-center gap-2">
         {isLoggedIn ? (
           <Button asChild size="sm">
@@ -176,7 +189,6 @@ export const Navbar = ({ isLoggedIn = false }: NavbarProps) => {
           </>
         )}
         <ThemeToggle mode="inline" className="w-auto justify-center" />
-
         <Button asChild size="sm" variant="ghost" aria-label={navbar.githubLink.ariaLabel}>
           <Link
             aria-label={navbar.githubLink.ariaLabel}
