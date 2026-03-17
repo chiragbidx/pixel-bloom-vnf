@@ -16,17 +16,26 @@ export async function getAllTeams() {
 
 // List team members for a team
 export async function getTeamMembers(teamId: string) {
+  // Select firstName and lastName separately, then compose in JS to avoid "db.sql is not a function" error
   const members = await db
     .select({
       id: users.id,
       email: users.email,
-      name: db.sql`${users.firstName} || ' ' || ${users.lastName}`,
+      firstName: users.firstName,
+      lastName: users.lastName,
       role: teamMembers.role,
     })
     .from(teamMembers)
     .innerJoin(users, eq(teamMembers.userId, users.id))
     .where(eq(teamMembers.teamId, teamId));
-  return members;
+
+  // Compose .name field from firstName and lastName:
+  return members.map(m => ({
+    id: m.id,
+    email: m.email,
+    name: [m.firstName, m.lastName].filter(Boolean).join(" "),
+    role: m.role,
+  }));
 }
 
 // Assign a user to a team (or change their existing team membership)
