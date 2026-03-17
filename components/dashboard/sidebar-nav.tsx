@@ -12,6 +12,8 @@ import {
   NotebookPen,
   BarChart3,
   Settings,
+  Plug,
+  CreditCard
 } from "lucide-react";
 import {
   Collapsible,
@@ -37,12 +39,15 @@ const sections: { title: string; items: NavItem[] }[] = [
       { label: "Activities", href: "/dashboard/activities", icon: ActivitySquare },
       { label: "Notes", href: "/dashboard/notes", icon: NotebookPen },
       { label: "Reports", href: "/dashboard/reports", icon: BarChart3 },
+      { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
     ],
   },
   {
     title: "Account",
     items: [
-      { label: "Team", href: "/dashboard/team", icon: Users },
+      { label: "Team Users", href: "/dashboard/users", icon: Users },
+      { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
+      { label: "Integrations", href: "/dashboard/integrations", icon: Plug },
       { label: "Settings", href: "/dashboard/settings", icon: Settings },
     ],
   },
