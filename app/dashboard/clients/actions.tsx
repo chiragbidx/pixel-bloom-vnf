@@ -17,19 +17,6 @@ export const clientFormSchema = z.object({
   notes: z.string().optional(),
 });
 
-// List clients for the current user's team
-export async function getClients() {
-  const session = await getAuthSession();
-  if (!session) throw new Error("Not authenticated");
-  // For now, assume a user is always part of one team; extend with teams as needed
-  if (!session.teamId) throw new Error("No team assigned");
-  return db
-    .select()
-    .from(clients)
-    .where(eq(clients.teamId, session.teamId))
-    .orderBy(clients.createdAt);
-}
-
 // Add (create) a new client
 export async function addClient(form: FormData) {
   const session = await getAuthSession();
