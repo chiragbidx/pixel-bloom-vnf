@@ -2,8 +2,7 @@
 
 import { DashboardContent } from "@/components/dashboard/dashboard-content";
 
-// Purpose: Client UI for /dashboard.
-// Use this file for interactive/dashboard presentation logic.
+// CRM: Client UI for /dashboard, propagates CRM context.
 
 type ClientProps = {
   greeting: string;
