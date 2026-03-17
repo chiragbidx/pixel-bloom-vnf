@@ -1,7 +1,7 @@
 import { getHomeContent } from "@/content/home";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { GroupIcon, Users2, Briefcase, Pipeline, ActivitySquare, MessageCircleMore, FileText, CheckCircle, Lock, KeyIcon } from "lucide-react";
+import { GroupIcon, Users2, Briefcase, PenLine, ActivitySquare, MessageCircleMore, FileText, CheckCircle, Lock, KeyIcon } from "lucide-react";
 
 const featuresCopy = [
   {
