@@ -23,3 +23,16 @@
   - **Help/Documentation**: Quick access to guides and support.
 - Updated sidebar navigation to show all above pages under Account.
 - Placeholder UI and server actions added for each new feature—ready for future DB and business logic wiring.
+
+## 2024-06-13
+
+### Added
+- Core CRM dashboard pages for a complete suite:
+  - **Reports**: Insights on CRM activity and performance.
+  - **Notes**: Internal notes for leads, clients, or deals.
+  - **Activities**: Manage workflow and track scheduled events.
+  - **Deals**: Monitor deal flow and status.
+  - **Contacts**: List and update people/relationships.
+  - **Clients**: Companies you serve or track.
+- Updated SidebarNav to include all new CRM pages under the CRM section.
+- Implemented placeholder UI and server actions for each page for future feature integration.
