@@ -12,14 +12,16 @@ export default async function ClientsPage() {
     // In real-world, redirect to signin or show error
     return <div className="text-destructive">Access denied</div>;
   }
-  if (!session.teamId) {
-    return <div className="text-destructive">No team assigned</div>;
+
+  // Removed no team assigned guard.
+  let clientData = [];
+  if (session.teamId) {
+    clientData = await db
+      .select()
+      .from(clients)
+      .where(eq(clients.teamId, session.teamId))
+      .orderBy(clients.createdAt);
   }
-  const clientData = await db
-    .select()
-    .from(clients)
-    .where(eq(clients.teamId, session.teamId))
-    .orderBy(clients.createdAt);
 
   return <Client clients={clientData} />;
 }
