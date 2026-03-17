@@ -1,24 +1,19 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
-  Activity,
   ArrowRight,
   ArrowUpRight,
-  Bell,
   CheckCircle2,
   Circle,
-  DollarSign,
-  FolderKanban,
-  Search,
-  TrendingUp,
   Users,
   Briefcase,
   NotebookPen,
-  BarChart3,
-  Pipeline,
   ActivitySquare,
+  DollarSign,
+  Search,
+  BadgeDollarSign,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -30,16 +25,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 
 type Metric = {
@@ -64,56 +50,49 @@ type ActivityItem = {
   icon: React.ComponentType<{ className?: string }>;
 };
 
-type MockProject = {
-  id: string;
-  name: string;
-  owner: string;
-  status: string;
-};
-
 const metrics: Metric[] = [
   { label: "Active Clients", value: "27", trend: "+2", icon: Users, description: "this month" },
   { label: "Deals in Pipeline", value: "15", trend: "+4", icon: Briefcase, description: "this month" },
   { label: "Total Pipeline Value", value: "$82,000", trend: "+$5k", icon: DollarSign, description: "this month" },
-  { label: "Activities", value: "58", trend: "+9", icon: ActivitySquare, description: "this month" }
+  { label: "Team Activities", value: "58", trend: "+9", icon: ActivitySquare, description: "this month" }
 ];
 
 const onboardingSteps: OnboardingStep[] = [
-  { title: "Add a client", description: "Create your first client record.", href: "/dashboard/clients", done: false },
-  { title: "Add a deal", description: "Track an opportunity in the pipeline.", href: "/dashboard/deals", done: false },
-  { title: "Invite team member", description: "Collaborate on deals as a team.", href: "/dashboard/team", done: false },
-  { title: "Log an activity", description: "Add a call, meeting, or note.", href: "/dashboard/activities", done: false },
+  { title: "Add your first client", description: "Create a new client record to kick-off your CRM workspace.", href: "/dashboard/clients", done: false },
+  { title: "Create your first deal", description: "Start tracking an opportunity in your pipeline.", href: "/dashboard/deals", done: false },
+  { title: "Invite your team", description: "Add team members to collaborate on CRM records.", href: "/dashboard/team", done: false },
+  { title: "Log an activity or note", description: "Attach a call, meeting, or note to a client or deal.", href: "/dashboard/activities", done: false },
 ];
 
 const recentActivity: ActivityItem[] = [
-  { title: "Client created", detail: "Added BetaPlus as a new client", time: "5 min ago", icon: Users },
-  { title: "Deal added", detail: "Q2 SaaS Expansion - stage: Proposal", time: "10 min ago", icon: Briefcase },
-  { title: "Note logged", detail: "Intro call note for BetaPlus", time: "22 min ago", icon: NotebookPen },
-  { title: "User joined", detail: "jay@boostbridge.io joined the team", time: "45 min ago", icon: Users },
+  { title: "Client added", detail: "BetaPlus joined CRM", time: "5 min ago", icon: Users },
+  { title: "Deal created", detail: "Q2 SaaS Expansion - stage: Proposal", time: "10 min ago", icon: Briefcase },
+  { title: "Note saved", detail: "Intro call outcome for BetaPlus", time: "22 min ago", icon: NotebookPen },
+  { title: "Team member invited", detail: "jay@boostbridge.io invited to workspace", time: "45 min ago", icon: Users },
 ];
 
 const quickActions = [
   { label: "Add Client", href: "/dashboard/clients", icon: Users },
   { label: "Add Deal", href: "/dashboard/deals", icon: Briefcase },
   { label: "Add Note", href: "/dashboard/notes", icon: NotebookPen },
-  { label: "Invite Team Member", href: "/dashboard/team", icon: Users },
+  { label: "Invite Team", href: "/dashboard/team", icon: Users },
 ];
 
 export function DashboardContent({ greeting, firstName }: { greeting: string; firstName: string }) {
   const [query, setQuery] = useState("");
-  const noResults = false; // Placeholder, implement real filter logic with data integration
+  const noResults = false; // In real flow: implement search/filter logic
 
   return (
     <>
-      {/* Welcome banner */}
+      {/* Updated CRM dashboard header */}
       <div className="mb-8 space-y-4">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">
-              {greeting}, {firstName} 👋
+              {greeting} {firstName && `, ${firstName}`} <span aria-hidden>👋</span>
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Welcome to your CRM workspace — manage clients, deals, and growth collaboratively.
+              Your secure workspace for startup client management, deals, and collaboration.
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -145,6 +124,7 @@ export function DashboardContent({ greeting, firstName }: { greeting: string; fi
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="pl-9 h-10 bg-muted/50 border-muted-foreground/15 focus-visible:border-border focus-visible:bg-background"
+            aria-label="Search CRM records"
           />
         </div>
       </div>
@@ -187,7 +167,7 @@ export function DashboardContent({ greeting, firstName }: { greeting: string; fi
           );
         })}
       </div>
-      {/* Getting started steps */}
+      {/* Onboarding steps and quick start */}
       <div className="mb-8 grid gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-2">
           <CardHeader className="pb-3">
@@ -197,7 +177,9 @@ export function DashboardContent({ greeting, firstName }: { greeting: string; fi
                 0 / {onboardingSteps.length}
               </Badge>
             </div>
-            <CardDescription>Start using StartwiseCRM by following these quick steps.</CardDescription>
+            <CardDescription>
+              Set up your CRM workspace in just a few steps.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-1">
             {onboardingSteps.map((step) => (
@@ -224,9 +206,9 @@ export function DashboardContent({ greeting, firstName }: { greeting: string; fi
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-base">Upcoming CRM Reporting</CardTitle>
+                <CardTitle className="text-base">CRM Reporting (coming soon)</CardTitle>
                 <CardDescription>
-                  In your next release: pipeline charts and activity insights, visible only to your startup.
+                  See CRM pipeline, activity, and deal insights for your startup.
                 </CardDescription>
               </div>
               <Badge variant="outline" className="text-xs font-medium">
@@ -236,7 +218,7 @@ export function DashboardContent({ greeting, firstName }: { greeting: string; fi
           </CardHeader>
           <CardContent>
             <div className="p-6 text-center text-muted-foreground text-sm">
-              <strong>Reporting is in development.</strong> Monitor clients, deals, and notes with secure, real-time dashboards tailored for startup teams.
+              <strong>Reports are coming soon.</strong> You’ll be able to analyze deal flow, activities, and pipeline velocity for your team.
             </div>
           </CardContent>
         </Card>
@@ -246,8 +228,8 @@ export function DashboardContent({ greeting, firstName }: { greeting: string; fi
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-base">Recent CRM Activity</CardTitle>
-              <CardDescription>Latest actions across your workspace</CardDescription>
+              <CardTitle className="text-base">Latest CRM Activity</CardTitle>
+              <CardDescription>Track team actions and key events in your startup's CRM.</CardDescription>
             </div>
             <Button variant="ghost" size="sm" className="gap-1.5 text-xs" disabled>
               View all
