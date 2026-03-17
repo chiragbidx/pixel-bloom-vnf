@@ -41,3 +41,12 @@
 
 ### Fixed
 - Replaced invalid `Pipeline` icon import from `lucide-react` in `LayoutFeatureGridSection.tsx` with the supported `PenLine` icon to resolve build errors.
+
+## 2024-06-14
+
+### Added
+- Fully implemented production-level Clients page in dashboard with full CRUD:
+  - Added Drizzle schema, migration, and journaling for clients table.
+  - Built server actions for list, add, edit, delete clients with zod validation and auth guards.
+  - Upgraded page and client component to support viewing, adding, editing, and deleting clients with live updates and error handling.
+[/list]
