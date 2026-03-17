@@ -1,6 +1,4 @@
-// ─── All dynamic copies for the site are updated for StartwiseCRM (branding, hero, features, contact, testimonials, navbar, footer, etc.) ───
-// Only keys and content that matter for the main page, sections, navbar, auth, and footer.
-// Owner: Chirag Dodiya, chirag@bidx.ai
+// StartwiseCRM HomeContent — now includes all required sections to ensure no undefined errors
 
 export type HeroContent = {
   badgeInner: string;
@@ -16,6 +14,22 @@ export type HeroContent = {
   heroImageAlt: string;
 };
 
+export type BenefitItem = { icon: string; title: string; description: string };
+export type BenefitsContent = {
+  eyebrow: string;
+  heading: string;
+  description: string;
+  items: BenefitItem[];
+};
+
+export type ServiceItem = { title: string; description: string; pro: boolean };
+export type ServicesContent = {
+  eyebrow: string;
+  heading: string;
+  subtitle: string;
+  items: ServiceItem[];
+};
+
 export type FeaturesContent = {
   eyebrow: string;
   heading: string;
@@ -23,10 +37,17 @@ export type FeaturesContent = {
   items: { icon: string; title: string; description: string }[];
 };
 
+export type TestimonialItem = {
+  image: string;
+  name: string;
+  role: string;
+  comment: string;
+  rating: number;
+};
 export type TestimonialsContent = {
   eyebrow: string;
   heading: string;
-  reviews: { image: string; name: string; role: string; comment: string; rating: number }[];
+  reviews: TestimonialItem[];
 };
 
 export type ContactContent = {
@@ -44,11 +65,17 @@ export type ContactContent = {
   formSubmitLabel: string;
 };
 
+export type FaqItem = { question: string; answer: string };
+export type FaqContent = {
+  eyebrow: string;
+  heading: string;
+  items: FaqItem[];
+};
+
 export type FooterContent = {
   brandName: string;
   copyright: string;
   attribution: { label: string; href: string };
-  // Only keys needed for footer structure.
 };
 
 export type NavbarContent = {
@@ -65,14 +92,16 @@ export type NavbarContent = {
 
 export type HomeContent = {
   hero: HeroContent;
+  benefits: BenefitsContent;
   features: FeaturesContent;
+  services: ServicesContent;
   testimonials: TestimonialsContent;
   contact: ContactContent;
+  faq: FaqContent;
   footer: FooterContent;
   navbar: NavbarContent;
 };
 
-// Populates StartwiseCRM content.
 export const defaultHomeContent: HomeContent = {
   hero: {
     badgeInner: "Empower",
@@ -87,11 +116,37 @@ export const defaultHomeContent: HomeContent = {
     heroImageDark: "/hero-image-dark.jpeg",
     heroImageAlt: "StartwiseCRM dashboard preview",
   },
+  benefits: {
+    eyebrow: "Why StartwiseCRM",
+    heading: "A CRM Made for Startup Teams",
+    description: "Built for agile teams that want efficient, collaborative, and secure client management with zero bloat.",
+    items: [
+      {
+        icon: "Users",
+        title: "Collaborative Client Management",
+        description: "Share live client records and deal data across your team. Get out of spreadsheets and sync as you grow.",
+      },
+      {
+        icon: "Pipeline",
+        title: "Visual, Actionable Pipeline",
+        description: "Track deals from new lead through close; stay on top of each stage for clear revenue forecasts.",
+      },
+      {
+        icon: "Key",
+        title: "Private, Multi-Tenant Isolation",
+        description: "Each startup’s data is siloed, with robust role-based permissions—your client information is always secure.",
+      },
+      {
+        icon: "Activity",
+        title: "Real-Time Activity Timeline",
+        description: "See every note, call, or task in a shared, filterable feed for each client or deal.",
+      },
+    ],
+  },
   features: {
     eyebrow: "Everything Startup Teams Need",
     heading: "Features for Growth & Collaboration",
-    subtitle:
-      "StartwiseCRM brings together client records, collaborative deal pipelines, team activity tracking, and secure startup data isolation.",
+    subtitle: "StartwiseCRM brings together client records, collaborative deal pipelines, team activity tracking, and secure startup data isolation.",
     items: [
       {
         icon: "Group",
@@ -125,6 +180,38 @@ export const defaultHomeContent: HomeContent = {
       },
     ],
   },
+  services: {
+    eyebrow: "Services",
+    heading: "Core CRM Capabilities",
+    subtitle: "All the essentials to help your startup team run client operations, close deals, and track notes securely.",
+    items: [
+      {
+        title: "Client/Contact CRUD",
+        description: "Create, update, archive, and collaborate on all your client and contact records—never lose important info as you grow.",
+        pro: true,
+      },
+      {
+        title: "Deal Lifecycle Management",
+        description: "Move deals through fixed pipeline stages, relate deals to clients & contacts, assign owners, and log expected revenue.",
+        pro: true,
+      },
+      {
+        title: "Team Collaboration",
+        description: "Multi-user role-based controls, secure invite flow, and real-time updates as your team works deals in parallel.",
+        pro: true,
+      },
+      {
+        title: "Activity Log & Notes",
+        description: "All calls, meetings, and notes are attached to records and visible in timeline feeds—never drop the ball again.",
+        pro: false,
+      },
+      {
+        title: "Secure Data Isolation",
+        description: "Each startup’s CRM and activity data is fully tenant-isolated, with role-based field-level gating.",
+        pro: false,
+      },
+    ],
+  },
   testimonials: {
     eyebrow: "Trusted by fast-moving teams",
     heading: "Startup teams love StartwiseCRM",
@@ -133,32 +220,28 @@ export const defaultHomeContent: HomeContent = {
         name: "Michelle V.",
         role: "Founder, GrowthSpark",
         image: "/demo-img.jpg",
-        comment:
-          "With StartwiseCRM, our team got organized, closed more deals, and finally had a place where every client touchpoint was visible.",
+        comment: "With StartwiseCRM, our team got organized, closed more deals, and finally had a place where every client touchpoint was visible.",
         rating: 5.0,
       },
       {
         name: "Jay Y.",
         role: "COO, BoostBridge",
         image: "/demo-img.jpg",
-        comment:
-          "The pipeline and activity feed helped us prioritize work, and the simple onboarding had our team up and running in a single afternoon!",
+        comment: "The pipeline and activity feed helped us prioritize work, and the simple onboarding had our team up and running in a single afternoon!",
         rating: 5.0,
       },
       {
         name: "Sana R.",
         role: "Head of Ops, QuickFund",
         image: "/demo-img.jpg",
-        comment:
-          "All of our startup’s client data is safely together, secure and accessible only to our team. Exactly what we needed to scale sales.",
+        comment: "All of our startup’s client data is safely together, secure and accessible only to our team. Exactly what we needed to scale sales.",
         rating: 5.0,
       },
       {
         name: "Luca K.",
         role: "Revenue Lead, ScaleMVP",
         image: "/demo-img.jpg",
-        comment:
-          "As a founder wearing many hats, having deals, notes, and team timelines together in StartwiseCRM made following up with leads so much easier.",
+        comment: "As a founder wearing many hats, having deals, notes, and team timelines together in StartwiseCRM made following up with leads so much easier.",
         rating: 5.0,
       },
     ],
@@ -176,6 +259,32 @@ export const defaultHomeContent: HomeContent = {
     },
     formSubjects: ["Support", "Onboarding", "CRM Features", "Demo Request", "Other"],
     formSubmitLabel: "Reach Out",
+  },
+  faq: {
+    eyebrow: "FAQ",
+    heading: "Common Questions",
+    items: [
+      {
+        question: "Is StartwiseCRM free to use?",
+        answer: "Yes! For startup teams, the core platform is available for internal use at zero cost. Advanced support or whiteglove onboarding are available on request.",
+      },
+      {
+        question: "Can I invite my whole team?",
+        answer: "Absolutely. StartwiseCRM is built for startup teams—invite as many internal users as your workflow requires.",
+      },
+      {
+        question: "Are my clients’ data secure and private?",
+        answer: "100%. Each startup is a tenant, and your CRM data is isolated with role-based access for admins and members. Only your team can see your client information.",
+      },
+      {
+        question: "Can I export or migrate my CRM data?",
+        answer: "Yes. We’re working on CSV exports and API hooks. Inquire via support for early access.",
+      },
+      {
+        question: "Can I customize pipeline stages?",
+        answer: "At present, pipeline stages are fixed (Lead, Qualified, Proposal, Won, Lost) for consistency and reporting. Customization is on our roadmap.",
+      },
+    ],
   },
   footer: {
     brandName: "StartwiseCRM",
