@@ -6,15 +6,12 @@ import { getAuthSession } from "@/lib/auth/session";
 import { db } from "@/lib/db/client";
 import { users } from "@/lib/db/schema";
 
-// Purpose: Server route entry for /dashboard.
-// Keep auth checks and database reads in this file,
-// then pass prepared props into `client.tsx`.
-
+// CRM-specific welcome—makes dashboard greet by name with CRM context.
 function getGreeting(): string {
   const hour = new Date().getHours();
-  if (hour < 12) return "Good morning";
-  if (hour < 18) return "Good afternoon";
-  return "Good evening";
+  if (hour < 12) return "Welcome to StartwiseCRM!";
+  if (hour < 18) return "Back to growing your clients?";
+  return "Closing deals tonight?";
 }
 
 export default async function DashboardPage() {
