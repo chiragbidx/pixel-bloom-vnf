@@ -6,10 +6,12 @@ import { usePathname } from "next/navigation";
 import {
   ChevronDown,
   Home,
-  Hammer,
-  Settings,
   Users,
-  CreditCard,
+  Briefcase,
+  ActivitySquare,
+  NotebookPen,
+  BarChart3,
+  Settings,
 } from "lucide-react";
 import {
   Collapsible,
@@ -26,21 +28,21 @@ type NavItem = {
 
 const sections: { title: string; items: NavItem[] }[] = [
   {
-    title: "Platform",
+    title: "CRM",
     items: [
       { label: "Overview", href: "/dashboard", icon: Home },
-      {
-        label: "Feature",
-        href: "/dashboard/feature",
-        icon: Hammer,
-      },
+      { label: "Clients", href: "/dashboard/clients", icon: Users },
+      { label: "Contacts", href: "/dashboard/contacts", icon: NotebookPen },
+      { label: "Deals", href: "/dashboard/deals", icon: Briefcase },
+      { label: "Activities", href: "/dashboard/activities", icon: ActivitySquare },
+      { label: "Notes", href: "/dashboard/notes", icon: NotebookPen },
+      { label: "Reports", href: "/dashboard/reports", icon: BarChart3 },
     ],
   },
   {
     title: "Account",
     items: [
       { label: "Team", href: "/dashboard/team", icon: Users },
-      { label: "Billing", href: "#", icon: CreditCard, disabled: true },
       { label: "Settings", href: "/dashboard/settings", icon: Settings },
     ],
   },
@@ -123,7 +125,6 @@ function NavSection({
 
 export function SidebarNav() {
   const pathname = usePathname();
-
   return (
     <div className="flex flex-1 flex-col">
       <nav className="flex-1 space-y-4">
