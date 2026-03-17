@@ -13,7 +13,11 @@ import {
   BarChart3,
   Settings,
   Plug,
-  CreditCard
+  CreditCard,
+  Bell,
+  ListOrdered,
+  Key,
+  HelpCircle
 } from "lucide-react";
 import {
   Collapsible,
@@ -45,6 +49,10 @@ const sections: { title: string; items: NavItem[] }[] = [
   {
     title: "Account",
     items: [
+      { label: "Notifications", href: "/dashboard/notifications", icon: Bell },
+      { label: "Activity Log", href: "/dashboard/activity-log", icon: ListOrdered },
+      { label: "API Keys", href: "/dashboard/api-keys", icon: Key },
+      { label: "Help", href: "/dashboard/help", icon: HelpCircle },
       { label: "Team Users", href: "/dashboard/users", icon: Users },
       { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
       { label: "Integrations", href: "/dashboard/integrations", icon: Plug },
