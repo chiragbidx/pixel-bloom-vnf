@@ -7,7 +7,8 @@ import { getAuthSession } from "@/lib/auth/session";
 import { revalidatePath } from "next/cache";
 import { clientFormSchema } from "./client-validation";
 
-// Add (create) a new client
+// Only export async functions—no objects, types, or re-exports!
+
 export async function addClient(form: FormData) {
   const session = await getAuthSession();
   if (!session) throw new Error("Not authenticated");
@@ -38,7 +39,6 @@ export async function addClient(form: FormData) {
   revalidatePath("/dashboard/clients");
 }
 
-// Update an existing client
 export async function updateClient(form: FormData) {
   const session = await getAuthSession();
   if (!session) throw new Error("Not authenticated");
@@ -78,7 +78,6 @@ export async function updateClient(form: FormData) {
   revalidatePath("/dashboard/clients");
 }
 
-// Delete a client
 export async function deleteClient(id: string) {
   const session = await getAuthSession();
   if (!session) throw new Error("Not authenticated");
