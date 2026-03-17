@@ -1,10 +1,25 @@
 import Client from "./client";
-import { getClients } from "./actions";
+import { db } from "@/lib/db/client";
+import { clients } from "@/lib/db/schema";
+import { getAuthSession } from "@/lib/auth/session";
+import { eq } from "drizzle-orm";
 
-// Server Component
 export const dynamic = "force-dynamic";
 
 export default async function ClientsPage() {
-  const clients = await getClients();
-  return <Client clients={clients} />;
+  const session = await getAuthSession();
+  if (!session) {
+    // In real-world, redirect to signin or show error
+    return <div className="text-destructive">Access denied</div>;
+  }
+  if (!session.teamId) {
+    return <div className="text-destructive">No team assigned</div>;
+  }
+  const clientData = await db
+    .select()
+    .from(clients)
+    .where(eq(clients.teamId, session.teamId))
+    .orderBy(clients.createdAt);
+
+  return <Client clients={clientData} />;
 }
