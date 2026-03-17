@@ -13,7 +13,6 @@ export default async function ClientsPage() {
     return <div className="text-destructive">Access denied</div>;
   }
 
-  // Removed no team assigned guard.
   let clientData = [];
   if (session.teamId) {
     clientData = await db
